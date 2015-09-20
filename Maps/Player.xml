@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resource_file type="PackedScene" subresource_count="4" version="1.1" version_name="Godot Engine v1.1.stable.d3b42e41b0">
+	<ext_resource path="res://Graphics/Sprites/Player.png" type="Texture"></ext_resource>
+	<resource type="ConvexPolygonShape2D" path="local://1">
+		<real name="custom_solver_bias"> 0 </real>
+		<vector2_array name="points" len="6"> 			-5.07317, 5.07317, -5.07317, 4.43902, -0.31707, -5.07317, 0.31707, -5.07317, 5.07317, 4.43902, 5.07317, 5.07317 </vector2_array>
+
+	</resource>
+	<resource type="GDScript" path="local://2">
+		<string name="script/source"> "&#000a;extends KinematicBody2D&#000a;&#000a;# member variables here, example:&#000a;# var a=2&#000a;# var b=&quot;textvar&quot;&#000a;&#000a;var Velocity = Vector2()&#000a;var yaw = 0&#000a;var pitch = 0&#000a;var sensitivity_speed = 0.25&#000a;&#000a;func _ready():&#000a;&#0009;set_fixed_process(true)&#000a;&#0009;set_process_input(true)&#000a;&#0009;Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)&#000a;&#0009;Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)&#000a;&#0009;pass&#000a;&#000a;func _fixed_process(delta):&#000a;&#0009;&#000a;&#0009;var input_speed = 300&#000a;&#0009;&#000a;&#0009;var x_axis = Input.get_joy_axis(0,0)&#000a;&#0009;var y_axis = Input.get_joy_axis(0,1)&#000a;&#0009;var speed_input = Vector2(x_axis,y_axis).length_squared()&#000a;&#0009;&#000a;&#0009;var t = get_node(&quot;.&quot;).get_transform()&#000a;&#0009;var bx = t.x #  &gt;--- This is the Matrix&apos;s &apos;X&apos; Row&#000a;&#0009;var by = t.y #  &gt;--- This is the Matrix&apos;s &apos;Y&apos; Row&#000a;#&#0009;print(bx,&quot; &quot;,by)&#000a;&#0009;&#000a;&#0009;if Input.is_action_pressed(&quot;ui_left&quot;):&#000a;&#0009;&#0009;Velocity.x = input_speed * bx.x&#000a;&#0009;&#0009;Velocity.y = input_speed * bx.y&#000a;&#0009;elif Input.is_action_pressed(&quot;ui_right&quot;):&#000a;&#0009;&#0009;Velocity.x = -input_speed * bx.x&#000a;&#0009;&#0009;Velocity.y = -input_speed * bx.y&#000a;&#0009;elif Input.is_action_pressed(&quot;ui_up&quot;):&#000a;&#0009;&#0009;Velocity.y = input_speed * by.y&#000a;&#0009;&#0009;Velocity.x = input_speed * by.x&#000a;&#0009;elif Input.is_action_pressed(&quot;ui_down&quot;):&#000a;&#0009;&#0009;Velocity.y = -input_speed * by.y&#000a;&#0009;&#0009;Velocity.x = -input_speed * by.x&#000a;&#000a;&#0009;elif(speed_input&lt;=0.2):&#000a;&#0009;&#0009;if (speed_input&lt;=1):&#000a;&#0009;&#0009;&#0009;Velocity.x = -input_speed * -(by.x * speed_input)&#000a;&#0009;&#0009;&#0009;Velocity.y = -input_speed * -(by.y * speed_input)&#000a;&#0009;&#0009;else:&#000a;&#0009;&#0009;&#0009;if(speed_input!=0):&#000a;&#0009;&#0009;&#0009;&#0009;Velocity.x = -input_speed * -(by.x * speed_input)&#000a;&#0009;&#0009;&#0009;&#0009;Velocity.y = -input_speed * -(by.y * speed_input)&#000a;&#0009;&#0009;&#0009;else:&#000a;&#0009;&#0009;&#0009;&#0009;Velocity.x = 0&#000a;&#0009;&#0009;&#0009;&#0009;Velocity.y = 0&#000a;&#0009;&#0009;pass&#000a;&#000a;&#0009;else:&#000a;&#0009;&#0009;Velocity.x = 0&#000a;&#0009;&#0009;Velocity.y = 0&#000a;&#0009;&#000a;&#0009;var motion = Velocity * delta&#000a;&#0009;move(motion)&#000a;&#0009;&#000a;&#0009;if Input.is_action_pressed(&quot;ui_accept&quot;):&#000a;&#0009;&#0009;OS.get_main_loop().quit()&#000a;&#000a;func _input(event):&#000a;&#000a;&#0009;&#000a;&#0009;var x_axis=Input.get_joy_axis(0,0)&#000a;&#0009;var y_axis=Input.get_joy_axis(0,1)&#000a;&#0009;var z_axis=Input.get_joy_axis(0,2)&#000a;&#0009;var direction = atan2(x_axis,y_axis) #This aims the Gamepad_Joy in a direction&#000a;&#0009;var speed_input = Vector2(x_axis,y_axis).length_squared() #This Captures the Axis Radius for Speed&#000a;&#000a;&#0009;if(event.type == InputEvent.JOYSTICK_MOTION):&#000a;#&#0009;&#0009;print(&quot;Joystick Degree: &quot;,rad2deg(direction))&#000a;#&#0009;&#0009;print(&quot;Speed: &quot;, speed_input)&#000a;&#0009;&#0009;if(speed_input&lt;=0.2):&#000a;&#0009;&#0009;&#0009;self.set_rot(direction)&#000a;&#0009;&#0009;else:&#000a;&#0009;&#0009;&#0009;self.set_rot(get_rot())&#000a;&#000a;&#0009;if(event.type == InputEvent.MOUSE_MOTION):&#000a;&#0009;&#0009;yaw = fmod(yaw - event.relative_x * sensitivity_speed, 360)&#000a;&#0009;&#0009;self.set_rot(deg2rad(yaw))&#000a;&#000a;" </string>
+
+	</resource>
+	<main_resource>
+		<dictionary name="_bundled" shared="false">
+			<string> "conn_count" </string>
+			<int> 0 </int>
+			<string> "conns" </string>
+			<int_array  len="0"> 				 </int_array>
+			<string> "names" </string>
+			<string_array  len="39">
+				<string> "Player" </string>
+				<string> "Node2D" </string>
+				<string> "_import_path" </string>
+				<string> "visibility/visible" </string>
+				<string> "visibility/opacity" </string>
+				<string> "visibility/self_opacity" </string>
+				<string> "visibility/light_mask" </string>
+				<string> "transform/pos" </string>
+				<string> "transform/rot" </string>
+				<string> "transform/scale" </string>
+				<string> "z/z" </string>
+				<string> "z/relative" </string>
+				<string> "__meta__" </string>
+				<string> "KinematicBody2D" </string>
+				<string> "input/pickable" </string>
+				<string> "shape_count" </string>
+				<string> "shapes/0/shape" </string>
+				<string> "shapes/0/transform" </string>
+				<string> "shapes/0/trigger" </string>
+				<string> "collision/layers" </string>
+				<string> "collision/mask" </string>
+				<string> "collision/margin" </string>
+				<string> "script/script" </string>
+				<string> "Sprite" </string>
+				<string> "texture" </string>
+				<string> "centered" </string>
+				<string> "offset" </string>
+				<string> "flip_h" </string>
+				<string> "flip_v" </string>
+				<string> "vframes" </string>
+				<string> "hframes" </string>
+				<string> "frame" </string>
+				<string> "modulate" </string>
+				<string> "region" </string>
+				<string> "region_rect" </string>
+				<string> "CollisionPolygon2D" </string>
+				<string> "build_mode" </string>
+				<string> "polygon" </string>
+				<string> "trigger" </string>
+			</string_array>
+			<string> "node_count" </string>
+			<int> 4 </int>
+			<string> "nodes" </string>
+			<int_array  len="160"> 				-1, -1, 1, 0, -1, 11, 2, 0, 3, 1, 4, 2, 5, 2, 6, 3, 7, 4, 8, 5, 9, 6, 10, 7, 11, 1, 12, 8, 0, 0, 0, 13, 13, -1, 19, 2, 0, 3, 1, 4, 2, 5, 2, 6, 3, 7, 9, 8, 5, 9, 6, 10, 7, 11, 1, 14, 10, 15, 3, 16, 11, 17, 12, 18, 10, 19, 3, 20, 3, 21, 13, 22, 14, 0, 1, 0, 23, 23, -1, 22, 2, 0, 3, 1, 4, 2, 5, 2, 6, 3, 7, 4, 8, 5, 9, 6, 10, 7, 11, 1, 24, 15, 25, 1, 26, 4, 27, 10, 28, 1, 29, 3, 30, 3, 31, 7, 32, 16, 33, 10, 34, 17, 12, 18, 0, 1, 0, 35, 35, -1, 14, 2, 0, 3, 1, 4, 2, 5, 2, 6, 3, 7, 19, 8, 20, 9, 21, 10, 7, 11, 1, 36, 7, 37, 22, 38, 10, 12, 23, 0 </int_array>
+			<string> "variants" </string>
+			<array  len="24" shared="false">
+				<node_path> "" </node_path>
+				<bool> True </bool>
+				<real> 1 </real>
+				<int> 1 </int>
+				<vector2> 0, 0 </vector2>
+				<real> 0 </real>
+				<vector2> 1, 1 </vector2>
+				<int> 0 </int>
+				<dictionary  shared="false">
+					<string> "__editor_plugin_screen__" </string>
+					<string> "2D" </string>
+					<string> "__editor_plugin_states__" </string>
+					<dictionary  shared="false">
+						<string> "2D" </string>
+						<dictionary  shared="false">
+							<string> "ofs" </string>
+							<vector2> -89.2538, -33.7566 </vector2>
+							<string> "snap_grid" </string>
+							<bool> False </bool>
+							<string> "snap_offset" </string>
+							<vector2> 0, 0 </vector2>
+							<string> "snap_pixel" </string>
+							<bool> True </bool>
+							<string> "snap_relative" </string>
+							<bool> False </bool>
+							<string> "snap_rotation" </string>
+							<bool> False </bool>
+							<string> "snap_rotation_offset" </string>
+							<real> 0 </real>
+							<string> "snap_rotation_step" </string>
+							<real> 0.261799 </real>
+							<string> "snap_show_grid" </string>
+							<bool> False </bool>
+							<string> "snap_step" </string>
+							<vector2> 10, 10 </vector2>
+							<string> "zoom" </string>
+							<real> 1.50734 </real>
+						</dictionary>
+						<string> "3D" </string>
+						<dictionary  shared="false">
+							<string> "ambient_light_color" </string>
+							<color> 0.15, 0.15, 0.15, 1 </color>
+							<string> "default_light" </string>
+							<bool> True </bool>
+							<string> "default_srgb" </string>
+							<bool> False </bool>
+							<string> "deflight_rot_x" </string>
+							<real> 0.942478 </real>
+							<string> "deflight_rot_y" </string>
+							<real> 0.628319 </real>
+							<string> "fov" </string>
+							<real> 45 </real>
+							<string> "show_grid" </string>
+							<bool> True </bool>
+							<string> "show_origin" </string>
+							<bool> True </bool>
+							<string> "viewport_mode" </string>
+							<int> 1 </int>
+							<string> "viewports" </string>
+							<array  len="4" shared="false">
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "listener" </string>
+									<bool> True </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+								</dictionary>
+							</array>
+							<string> "zfar" </string>
+							<real> 500 </real>
+							<string> "znear" </string>
+							<real> 0.1 </real>
+						</dictionary>
+					</dictionary>
+					<string> "__editor_run_settings__" </string>
+					<dictionary  shared="false">
+						<string> "custom_args" </string>
+						<string> "-l $scene" </string>
+						<string> "run_mode" </string>
+						<int> 0 </int>
+					</dictionary>
+				</dictionary>
+				<vector2> 328, 174 </vector2>
+				<bool> False </bool>
+				<resource  resource_type="Shape2D" path="local://1">  </resource>
+				<matrix32> -3.15385, 2.75718e-007, -2.75718e-007, -3.15385, -6.19888e-006, 2.00272e-005 </matrix32>
+				<real> 0.08 </real>
+				<resource  resource_type="Script" path="local://2">  </resource>
+				<resource  resource_type="Texture" path="res://Graphics/Sprites/Player.png">  </resource>
+				<color> 1, 1, 1, 1 </color>
+				<rect2> 0, 0, 0, 0 </rect2>
+				<dictionary  shared="false">
+					<string> "_edit_lock_" </string>
+					<bool> True </bool>
+				</dictionary>
+				<vector2> -6.19888e-006, 2.00272e-005 </vector2>
+				<real> 180 </real>
+				<vector2> 3.15385, 3.15385 </vector2>
+				<vector2_array  len="6"> 					-0.31707, -5.07317, 0.31707, -5.07317, 5.07317, 4.43902, 5.07317, 5.07317, -5.07317, 5.07317, -5.07317, 4.43902 </vector2_array>
+				<dictionary  shared="false">
+					<string> "_edit_lock_" </string>
+					<bool> True </bool>
+				</dictionary>
+			</array>
+			<string> "version" </string>
+			<int> 1 </int>
+		</dictionary>
+
+	</main_resource>
+</resource_file>
